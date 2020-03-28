@@ -1,6 +1,10 @@
 # !/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+author:gadfy
+"""
+
 import time
 from multiprocessing import Queue
 from multiprocessing import Process
