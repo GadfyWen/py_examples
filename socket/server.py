@@ -7,6 +7,9 @@ import select
 import Queue
 import datetime
 import messager
+import urllib2
+import json
+from quehub import QueHub
 
 #创建socket对象
 serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -37,6 +40,8 @@ messagers = {}
 
 #文件句柄到所对应对象的字典，格式为{句柄：对象}
 fd_to_socket = {serversocket.fileno():serversocket,}
+quehub_send = QueHub()
+
 
 while True:
   print "等待活动连接......"
@@ -86,9 +91,10 @@ while True:
             messagers[connection].unpack(recv_buffers[connection][:messagers[connection].len + messager.HEADER_SIZE])
             data = messagers[connection].data
             recv_buffers[connection] = recv_buffers[connection][:messagers[connection].len + messager.HEADER_SIZE:]
-        print len(data)
-        print data
-        print datetime.datetime.now()
+            #req = urllib2.Request("http://127.0.0.1/tst/{}".format(str(data))) 
+            quehub_send.msg_pub(str(data))
+            #urllib2.urlopen(req)
+            print "send"
         if data:
            #print "收到数据：" , data , "客户端：" , socket.getpeername()
            #将数据放入对应客户端的字典
